@@ -1,0 +1,10 @@
+{
+"ca-certificate": "ca-certificate.pem.crt",
+"private-key": "private.pem.key",
+"certificate": "certificate.pem.crt",
+"client-id": "ospi-1"
+"endpoint": "xxxxxxxxxxxxxx.iot.us-east-1.amazonaws.com",
+"ospi-password-hash": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+"ospi-base-url": "http://localhost:8080",
+"topic": "sprinkler/ospi1"
+}

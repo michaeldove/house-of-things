@@ -1,0 +1,10 @@
+[Unit]
+Description=IoT Service
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/loca/bin/iot
+
+[Install]
+WantedBy=multi-user.target

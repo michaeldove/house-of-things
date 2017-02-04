@@ -1,0 +1,104 @@
+#!python
+import json
+import requests
+import sys
+import time
+import logging
+from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+
+
+################################################################################
+# Logging
+################################################################################
+
+FORMAT = '%(asctime)-15s %(clientip)s %(user)-8s %(message)s'
+logging.basicConfig(format=FORMAT, level=logging.DEBUG)
+d = {'clientip': '192.168.0.1', 'user': 'fbloggs'}
+logger = logging.getLogger('iot')
+
+
+################################################################################
+# Configuration handling
+################################################################################
+
+GLOBAL_CONFIG_PATH = '/etc/iot/iot.json'
+LOCAL_CONFIG_PATH = './iot.json'
+
+def config_path():
+    import os.path
+    if os.path.isfile(LOCAL_CONFIG_PATH):
+	return LOCAL_CONFIG_PATH
+    elif os.path.isfile(GLOBAL_CONFIG_PATH):
+	return GLOBAL_CONFIG_PATH
+    else:
+	return None
+
+conf_path = config_path()
+if conf_path is None:
+    print "Specify the config file at either of these locations: " + ', '.join([LOCAL_CONFIG_PATH, GLOBAL_CONFIG_PATH])
+    sys.exit(1)
+
+config = json.loads(open(conf_path, 'r').read())
+ca_certificate = config['ca-certificate']
+private_key = config['private-key']
+certificate = config['certificate']
+endpoint = config['endpoint']
+ospi_password = config['ospi-password-hash']
+client_id = config['client-id']
+ospi_base_url = config['ospi-base-url']
+topic = config['topic']
+
+################################################################################
+# AWS IoT Configuration
+################################################################################
+
+myMQTTClient = AWSIoTMQTTClient(client_id)
+myMQTTClient.configureEndpoint(endpoint, 8883)
+myMQTTClient.configureCredentials(ca_certificate, private_key, certificate)
+myMQTTClient.configureOfflinePublishQueueing(-1)  # Infinite offline Publish
+myMQTTClient.configureDrainingFrequency(2)  # Draining: 2 Hz
+myMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
+myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
+
+
+################################################################################
+# OSPI API Integration
+################################################################################
+
+def manual_zone(sprinkler_index, sprinkler_enable, duration):
+    requests.get(ospi_base_url+'/cm', params={'pw': ospi_password,
+                                              'sid': sprinkler_index,
+					      'en': sprinkler_enable,
+					      't': duration})
+
+################################################################################
+# AWS IoT Handling
+################################################################################
+
+def topic_callback(client, userdata, message):
+    
+    logger.debug('Received message: %s from topic: %s', message.payload, message.topic)
+
+    packet = json.loads(message.payload)
+    sprinkler_index = packet['sprinkler_index']
+    sprinkler_enable = packet['sprinkler_enable']
+    duration = packet['sprinkler_duration']
+    logger.debug('Commanded sprinkler index: %d, enabled: %d, duration: %d', 
+		 sprinkler_index, sprinkler_enable, duration)
+    manual_zone(sprinkler_index, sprinkler_enable, duration)
+ 
+
+
+myMQTTClient.connect()
+logger.debug('Connected to IoT broker: %s', endpoint)
+myMQTTClient.subscribe(topic, 1, topic_callback)
+logger.debug('Subscribed to topic: %s', topic)
+
+while True:
+    time.sleep(1)
+
+
+myMQTTClient.unsubscribe(topic)
+logger.debug('Unsubscribed from topic: %s', topic)
+myMQTTClient.disconnect()
+logger.debug('Disconnected from IoT broker: %s', endpoint)
