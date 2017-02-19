@@ -1,0 +1,22 @@
+{
+  "intents": [
+    {
+      "intent": "SprinklerIntent",
+      "slots": [
+        {
+          "name": "Duration",
+          "type":  "AMAZON.DURATION"
+        }
+      ]
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+        {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}
