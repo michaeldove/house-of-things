@@ -114,6 +114,7 @@ Setup the Alexa skill handler:
 
 ```
 cd controller/alexa
+pip install -r requirements.txt -t .
 python setup-aws-alexa-lambda.py
 ```
 TIP: The Role ARN and Lambda ARN are printed if you need to delete these resources.
