@@ -6,7 +6,7 @@ so that you can command your sprinkler.
 
 ## Flow of messages
 
-This is how your commands are sent the the OSPI server:
+This is how your commands are sent to the OSPI server:
 
 Echo -> Alexa -> Lambda -> AWS IoT -> IoT client -> OSPI server
 
@@ -105,7 +105,7 @@ sudo systemctrl start iot.service
 Alexa Skill setup is a manual operation however the creation of the Lambda is automated.
 
 ####Skill configuration
-Create an Alexa skill within [developer.amazon.com](developer.amazon.com).
+Create an Alexa skill within [developer.amazon.com](http://developer.amazon.com).
 Use INTENT.txt, UTTERANCES.txt for field values within the skill configuration.
 
 
