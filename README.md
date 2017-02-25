@@ -13,12 +13,12 @@ Echo -> Alexa -> Lambda -> AWS IoT -> IoT client -> OSPI server
 
 ## Project
 
-The project is organised into 2 parts: __thing__ and __controller__.
+The project is organised into 2 parts, __thing__ and __controller__.
 
 ###Thing
 A Thing is the Raspberry Pi running the IoT client and OSPI server.
 
-##Controller
+###Controller
 The Alexa service is a controller that sends commands to the Thing.
 Other examples could be a Mobile App.
 
@@ -42,9 +42,19 @@ cd thing/ospi
 python setup-aws-iot.py
 ```
 
-If all went well you'll see the ARNs for the certificates, policy and thing printed to the console and most importantly the certificate and keys for use on your Thing.  
+If all went well you'll see the following printed to the console:
 
-TIP: Use these values if you want to delete the provisioned resources.
+- Certificate ARN
+- Policy ARN
+- Thing ARN 
+
+The certificate and keys for use on your Thing will also be saved to:
+
+- opensprinklerpi-private.pem.key
+- opensprinklerpi-public.pem.key (unused)
+- opensprinklerpi-certificate.pem.crt
+
+_TIP: Use these values if you want to delete the provisioned resources._
 
 ####Install
 Deploying to a Raspberry Pi Thing is simple, copy the thing/ospi directory onto your Raspberry Pi, then execute the following:
@@ -63,13 +73,15 @@ After successful installation you'll need to configure the IoT client.
 
 Set the endpoint value to your AWS IoT endpoint located within the AWS IoT Dashboard.
 
-Use our private key and certificate output in the provisioning step.  You'll need to [download the Verisign ca-certificate](https://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem), the public key is not used. Save as:
+You'll need to [download the Verisign ca-certificate](https://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem) and save as ca-certificate.pem.crt.
 
-- ca-certificate.pem.crt
-- certificate.pem.crt
-- private.pem.key
+```
+curl -o ca-certificate.pem.crt https://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem
+```
 
-move these files into /etc/iot/ the exact location is specified within the iot.json.
+Move ca-certificate.pem.crt, opensprinklerpi-private.pem.key and opensprinklerpi-certificate.pem.crt into /etc/iot/. 
+
+If you prefer to keep your certificates and key in an alternative location, you may their path within iot.json.
 
 MD5 your OSPI password and set as ospi-password-hash in /etc/iot/iot.json:
 

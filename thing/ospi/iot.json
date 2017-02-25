@@ -1,7 +1,7 @@
 {
-"ca-certificate": "ca-certificate.pem.crt",
-"private-key": "private.pem.key",
-"certificate": "certificate.pem.crt",
+"ca-certificate": "/etc/iot/ca-certificate.pem.crt",
+"private-key": "/etc/iot/opensprinklerpi-private.pem.key",
+"certificate": "/etc/iot/opensprinklerpi-certificate.pem.crt",
 "client-id": "ospi-1"
 "endpoint": "xxxxxxxxxxxxxx.iot.us-east-1.amazonaws.com",
 "ospi-password-hash": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
