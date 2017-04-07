@@ -104,13 +104,13 @@ Ensure each of the following values in iot.json is modified to suit your setup:
 A systemd unit configuration is deployed to the /lib/systemd/system directory it can be enabled:
 
 ```
-sudo systemctrl enable iot.service
+sudo systemctl enable iot.service
 ```
 
 The service can be started immediately with:
 
 ```
-sudo systemctrl start iot.service
+sudo systemctl start iot.service
 ```
 
 ###Alexa
