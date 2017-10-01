@@ -1,4 +1,4 @@
-#Alexa IoT Sprinker
+# Alexa IoT Sprinker
 
 Integrates OpenSprinkler Pi to the AWS Alexa
 so that you can command your sprinkler.
@@ -15,19 +15,19 @@ Echo -> Alexa -> Lambda -> AWS IoT -> IoT client -> OSPI server
 
 The project is organised into 2 parts, __thing__ and __controller__.
 
-###Thing
+### Thing
 A Thing is the Raspberry Pi running the IoT client and OSPI server.
 
-###Controller
+### Controller
 The Alexa service is a controller that sends commands to the Thing.
 Other examples could be a Mobile App.
 
 ## Deployment
 
-###Thing
+### Thing
 Deploying a Thing requires AWS IoT Thing provisioning then setting up our Thing to connect to AWS IoT.
 
-####Provisioning
+#### Provisioning
 Install the depdencies to setup AWS IoT, in this case it's boto3.
 
 ```
@@ -56,7 +56,7 @@ The certificate and keys for use on your Thing will also be saved to:
 
 _TIP: Use these values if you want to delete the provisioned resources._
 
-####Install
+#### Install
 Deploying to a Raspberry Pi Thing is simple, copy the thing/ospi directory onto your Raspberry Pi, then execute the following:
 
 ```
@@ -68,7 +68,7 @@ If successful you'll have:
 - sample configuration at **/etc/iot/iot.json**
 - systemd unit installed as **iot.service**
 
-####Configure
+#### Configure
 After successful installation you'll need to configure the IoT client.
 
 Set the endpoint value to your AWS IoT endpoint located within the AWS IoT Dashboard.
@@ -99,7 +99,7 @@ Ensure each of the following values in iot.json is modified to suit your setup:
 - ospi-base-url
 
 
-####Running at startup
+#### Running at startup
 
 A systemd unit configuration is deployed to the /lib/systemd/system directory it can be enabled:
 
@@ -113,15 +113,15 @@ The service can be started immediately with:
 sudo systemctl start iot.service
 ```
 
-###Alexa
+### Alexa
 Alexa Skill setup is a manual operation however the creation of the Lambda is automated.
 
-####Skill configuration
+#### Skill configuration
 Create an Alexa skill within [developer.amazon.com](http://developer.amazon.com).
 Use INTENT.txt, UTTERANCES.txt for field values within the skill configuration.
 
 
-####Lambda
+#### Lambda
 Setup the Alexa skill handler:
 
 ```
@@ -131,13 +131,13 @@ python setup-aws-alexa-lambda.py
 ```
 TIP: The Role ARN and Lambda ARN are printed if you need to delete these resources.
 
-##Testing
+## Testing
 1. Open the AWS IoT platform and select "Test"
 2. Subscribe to Topic "home/sprinkler"
 3. Open Alexa Skill > Test
 4. Enter Utterance "turn on my sprinkler for 5 seconds"
 5. Confirm a message is received in AWS IoT Platform Test console
 
-##Troubleshooting
+## Troubleshooting
 
 If connection fails with a timeout or a certificate error it's likely your AWS IoT certificate isn't setup correctly, please ensure a policy is attached and specifies the appropriate permissions and a Thing is attached.
