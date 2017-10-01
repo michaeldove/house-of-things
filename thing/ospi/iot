@@ -11,7 +11,7 @@ from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 # Logging
 ################################################################################
 
-FORMAT = '%(asctime)-15s %(clientip)s %(user)-8s %(message)s'
+FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.DEBUG)
 d = {'clientip': '192.168.0.1', 'user': 'fbloggs'}
 logger = logging.getLogger('iot')
@@ -46,7 +46,7 @@ endpoint = config['endpoint']
 ospi_password = config['ospi-password-hash']
 client_id = config['client-id']
 ospi_base_url = config['ospi-base-url']
-topic = config['topic']
+topic = str(config['topic'])
 
 ################################################################################
 # AWS IoT Configuration
